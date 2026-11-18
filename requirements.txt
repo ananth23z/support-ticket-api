@@ -1,0 +1,17 @@
+# ---- Web framework & server ----
+fastapi>=0.115          # the web framework (routing, validation, Swagger, DI)
+uvicorn[standard]>=0.30 # the ASGI web server that runs the app (like Kestrel)
+python-multipart>=0.0.9 # needed to read FORM data (used by the /auth/login endpoint)
+
+# ---- Data & validation ----
+sqlalchemy>=2.0         # ORM (like Entity Framework)
+pydantic>=2.7           # request/response validation (DTOs)
+email-validator>=2.1    # lets Pydantic validate email addresses (EmailStr)
+
+# ---- Security ----
+PyJWT>=2.8              # create and verify JWT access tokens
+argon2-cffi>=23.1       # Argon2 password hashing
+
+# ---- Testing ----
+pytest>=8.0             # test runner
+httpx>=0.27             # HTTP client used by FastAPI's TestClient
