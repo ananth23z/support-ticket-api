@@ -1,85 +1,109 @@
 # Support Ticket Management API
 
-A beginner-friendly, production-style REST API built with **FastAPI**, **SQLAlchemy**, **SQLite**, **JWT** and **Argon2**.
-Customers raise tickets, agents resolve them, and admins manage users and assign work.
+A RESTful backend application built using **Python, FastAPI, SQLAlchemy, and SQLite** to manage customer support tickets with secure authentication and role-based access control.
 
-Every file is heavily commented, including comparisons to **ASP.NET Core** concepts.
-See `Support_Ticket_API_Guide.pdf` for a full walkthrough.
+## Tech Stack
 
-## Quick start
+- **Language:** Python 3.12+
+- **Framework:** FastAPI
+- **ORM:** SQLAlchemy 2.0
+- **Database:** SQLite
+- **Validation:** Pydantic v2
+- **Authentication:** JWT (PyJWT)
+- **Password Hashing:** Argon2
+- **Testing:** Pytest, HTTPX
+- **Documentation:** Swagger / OpenAPI
+- **Server:** Uvicorn
+- **Version Control:** Git, GitHub
+
+## Key Features
+
+- User registration and login with JWT authentication.
+- Secure password hashing using Argon2.
+- Role-based access control (Admin, Agent, Customer).
+- User profile and user management.
+- Ticket creation, assignment, updating, and resolution.
+- Ticket status and priority management.
+- Search, filtering, sorting, and pagination.
+- SQLAlchemy ORM for database operations.
+- Dependency injection using FastAPI `Depends()`.
+- Centralized exception handling and request logging.
+- Automated API and unit testing using Pytest and HTTPX.
+
+## Architecture
+
+Implemented a modular, layered architecture with separation of concerns:
+
+- **Routers:** API endpoints and request handling.
+- **Schemas:** Request validation and response serialization.
+- **Models:** Database entities and relationships.
+- **Services:** Business logic.
+- **Dependencies:** Database sessions, authentication, and authorization.
+- **Core:** Configuration, security, and exception handling.
+- **Middleware:** Request logging and execution-time tracking.
+- **Tests:** Automated unit and integration tests.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/auth/register` | User registration |
+| POST | `/auth/login` | User authentication |
+| GET/PUT | `/users/me` | Manage own profile |
+| GET/POST | `/users` | User management (Admin) |
+| GET/PATCH | `/users/{id}` | Manage users (Admin) |
+| POST | `/tickets` | Create ticket |
+| GET | `/tickets` | List tickets with filters |
+| GET | `/tickets/{id}` | Get ticket details |
+| PUT | `/tickets/{id}` | Update ticket |
+| PATCH | `/tickets/{id}/status` | Update ticket status |
+| PATCH | `/tickets/{id}/assign` | Assign ticket to agent |
+| GET | `/tickets/stats` | Ticket statistics (Admin) |
+| DELETE | `/tickets/{id}` | Delete ticket (Admin) |
+
+## Getting Started
 
 ```bash
-# 1. Create and activate a virtual environment
-python -m venv venv
-venv\Scripts\activate          # Windows
-source venv/bin/activate       # macOS / Linux
+# Clone repository
+git clone https://github.com/<your-username>/support-ticket-api.git
 
-# 2. Install dependencies
+# Create virtual environment
+python -m venv venv
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 
-# 3. Run the server
+# Run application
 uvicorn app.main:app --reload
-
-# 4. Open Swagger UI
-#    http://127.0.0.1:8000/docs
 ```
 
-A default admin is created on first start: **admin@example.com / Admin@123**
-(click **Authorize** in Swagger, put the email in the *username* box).
+**Swagger UI:** http://127.0.0.1:8000/docs
 
-## Run the tests
+## Run Tests
 
 ```bash
 pytest -v
 ```
 
-## Project structure
+## Concepts Demonstrated
 
-```
-app/
-├── main.py                  # entry point: wires everything together (like Program.cs)
-├── dependencies.py          # DI: get_db, get_current_user, require_roles
-├── core/
-│   ├── config.py            # settings (like appsettings.json)
-│   ├── database.py          # engine, session, Base, get_db
-│   ├── security.py          # Argon2 hashing + JWT create/decode
-│   ├── exceptions.py        # custom errors + centralized handlers
-│   └── logging_config.py    # logging setup
-├── models/                  # SQLAlchemy tables (entities)
-├── schemas/                 # Pydantic request/response models (DTOs)
-├── services/                # business logic
-├── routers/                 # API endpoints (controllers)
-└── middleware/              # request logging + timing
-tests/                       # pytest API + unit tests
-```
+- REST API design and HTTP methods.
+- Dependency Injection and middleware.
+- Layered architecture and separation of concerns.
+- ORM, database relationships, and session management.
+- JWT authentication and role-based authorization.
+- Request validation and exception handling.
+- Search, filtering, sorting, and pagination.
+- Unit and integration testing.
 
-## Endpoints
+## Future Enhancements
 
-| Method | Path | Who | Purpose |
-|---|---|---|---|
-| POST | `/auth/register` | public | Register a customer |
-| POST | `/auth/login` | public | Get a JWT token |
-| GET/PUT | `/users/me` | any user | View / update own profile |
-| GET/POST | `/users` | admin | List / create users (create agents here) |
-| GET/PATCH | `/users/{id}` | admin | View / change role or deactivate |
-| POST | `/tickets` | customer | Create a ticket |
-| GET | `/tickets` | any user | List visible tickets (search, filter, sort, paginate) |
-| GET | `/tickets/stats` | admin | Ticket statistics |
-| GET | `/tickets/{id}` | owner / assigned agent / admin | View a ticket |
-| PUT | `/tickets/{id}` | owner (while open) / admin | Edit title, description, priority |
-| PATCH | `/tickets/{id}/status` | assigned agent / admin | Change status |
-| PATCH | `/tickets/{id}/assign` | admin | Assign to an agent |
-| DELETE | `/tickets/{id}` | admin | Delete |
-
-Example list query: `/tickets?search=login&status=open&priority=high&sort_by=priority&order=desc&page=1&size=10`
-
-## Uploading to GitHub
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: Support Ticket Management API"
-git branch -M main
-git remote add origin https://github.com/<your-username>/support-ticket-api.git
-git push -u origin main
-```
+- PostgreSQL integration.
+- Alembic database migrations.
+- Docker containerization.
+- Redis caching.
+- CI/CD with GitHub Actions.
+- Azure cloud deployment.
